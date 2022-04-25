@@ -9,21 +9,29 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
+import environ
+import os
 
 from pathlib import Path
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-abc80tzv1(i!)z_(qd2p(3umk16agi80@w@yrjio!g_lwrz73x'
+SECRET_KEY = env('SECRET_KEY')#'django-insecure-abc80tzv1(i!)z_(qd2p(3umk16agi80@w@yrjio!g_lwrz73x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -81,12 +89,28 @@ WSGI_APPLICATION = 'MainApp.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+mysql={
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'curltest',
+        'USER': 'root',
+        'PASSWORD': 'aknakn0091',
+        'HOST': 'localhost',
+        'PORT': '3306'
+    }
+sqlite3={
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+DATABASES = {
+    'default': mysql if env('DRIVER') == 'mysql' else sqlite3
 }
+
 
 
 # Password validation

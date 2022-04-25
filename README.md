@@ -1,5 +1,17 @@
 # django-crud-and-jwt
 
+### .env sample
+```
+DEBUG=True
+DRIVER=sqlite3 or mysql
+SECRET_KEY=insecure-abc80tzv1(i!)z_(qd2p(3umk16agi80@w@yrjio!g_lwrz73x
+SQL_HOST=localhost
+SQL_PORT=3306
+SQL_USER=usr1
+SQL_PASSWORD=pass1
+SQL_DB_NAME=crudtest
+```
+
 ## dockerize
 ### Build Process
 ```shell
@@ -9,7 +21,6 @@ docker build -t curltest -f ./dockerize/Dockerfile .
 port 9090
 ```shell
 docker run -i -t -d --name curltest001 -p 9000:80 --privileged curltest:latest
-docker run -i -t -d --name curltest001 --privileged curltest:latest
 docker exec -it curltest001 bash
 ```
 ### clean the containers
@@ -33,7 +44,7 @@ curl \
   -X POST \
   -H "Content-Type: application/json" \
   -d '{"username": "admin", "password": "123456"}' \
-  http://localhost:9000/api/auth/login
+  http://localhost:8000/api/auth/login
 ```
 ### Renew Token (refresh token)
 You have to replace the refresh token with your own refresh token
