@@ -15,7 +15,7 @@
 - Configuration without Docker
 
 ### Story and Program Flow
-![alt text](resource/apiflow.png)
+
 #### Story
 Our task is to create/update/delete/Get/list the product(s).  
 However we need **JWT** to protect all our product api routes,  
@@ -24,6 +24,7 @@ so we will have to create two services.
 - (2) **token refresh service** to generate new **access token** 
 #### API Flow
 Program Flow is as the following diagram.
+![alt text](resource/apiflow.png)
 #### API Request Method and Access Function  
 HTTP Request Method | Django Access Function | Remark
 --- | ---  | ---
