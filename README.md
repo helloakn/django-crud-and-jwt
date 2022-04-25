@@ -24,6 +24,7 @@ curl \
 ```
 
 ### Get Product List
+You have to replace with your own "access token" , you can get it from login process.
 ```shell
 curl -X GET \
 -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUwODk4MzgwLCJpYXQiOjE2NTA4OTgwODAsImp0aSI6IjNiMzBkZjc1OGEwMTQ4YjNiZGRlYTc3YzYwYzJkZDc2IiwidXNlcl9pZCI6MX0.5VBwMa0DptAB_7WyRjy4fE7FLgTJv_tDYcloT3_BIzM" \
