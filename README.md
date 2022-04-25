@@ -15,6 +15,7 @@
 - Configuration without Docker
 
 ### Story and Program Flow
+![alt text](resource/apiflow.png)
 #### Story
 Our task is to create/update/delete/Get/list the product(s).  
 However we need **JWT** to protect all our product api routes,  
