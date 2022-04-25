@@ -1,6 +1,38 @@
-# django-crud-and-jwt
+<div id="top"></div> 
+
+# Simple Django CRUD and JWT
+[![Star Count](https://img.shields.io/badge/dynamic/json?color=brightgreen&label=Star&query=stargazers_count&url=https%3A%2F%2Fapi.github.com%2Frepos%2Fhelloakn%2Fdjango-crud-and-jwt)](https://github.com/helloakn/django-crud-and-jwt) [![Licence](https://img.shields.io/badge/dynamic/json?color=informational&label=LICENCE&query=license.name&url=https%3A%2F%2Fapi.github.com%2Frepos%2Fhelloakn%2FVehicleTrackingSystem-FullStack)](https://github.com/helloakn/django-crud-and-jwt) [![Language](https://img.shields.io/badge/dynamic/json?color=blueviolet&label=Language&query=language&url=https%3A%2F%2Fapi.github.com%2Frepos%2Fhelloakn%2Fdjango-crud-and-jwt)](https://github.com/helloakn/VehicleTrackingSystem-FullStack) 
+
+## Table Of contents
+- Story and API Flow 
+  - Story
+  - API Flow  
+    - Flow Diagram
+    - API Request Method and Access Function 
+- Build With
+- Configuration with Dockerize
+  - .env simple 
+- Configuration without Docker
+
+### Story and Program Flow
+#### Story
+Our task is to create/update/delete/Get/list the product(s).  
+However we need **JWT** to protect all our product api routes,  
+so we will have to create two services.  
+- (1) **login service** to grant **access token** and **refresh token**  
+- (2) **token refresh service** to generate new **access token** 
+#### API Flow
+Program Flow is as the following diagram.
+#### API Request Method and Access Function  
+HTTP Request Method | Django Access Function | Remark
+--- | ---  | ---
+GET | get | get record(s) function
+POST | post | create function
+PATCH | patch | update function
+DELETE | delete | delete function
 
 ### .env sample
+file location exists as ./code/.env
 ```
 DEBUG=True
 DRIVER=sqlite3 or mysql
