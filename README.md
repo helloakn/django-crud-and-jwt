@@ -16,7 +16,8 @@
 - (2) Monolith Build Image And Create Container
   - (2.1) Build Image
   - (2.2) Create Container
-- Configuration with Dockerize
+- (3) MicroService Build Image and Create Containers
+  - (3.1) Architecture for local
   - .env simple 
 - Configuration without Docker
 - Manual Test with CURL
@@ -47,15 +48,17 @@ DELETE | delete | delete function
 ```shell
 docker build -t curltest:monolith --no-cache  -f ./dockerize/Dockerfile .
 ```
-#### Create Container
+#### (2.2) Create Container
 ```shell
 docker run -i -t -d --name curltest001 \
 -p 9000:80 \
 --privileged curltest:monolith
 ```
-### MicroService Build Process
-#### (2.1) Crete network
-```
+### (3) MicroService Build Image and Create Containers
+#### (3.1) Architecture for local
+![alt text](resource/local-archie.png)
+#### (3.2) Crete network
+```shell
 docker network create \
   --driver=bridge \
   --subnet=172.2.0.0/16 \
