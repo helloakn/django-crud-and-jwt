@@ -72,7 +72,7 @@ create database container
 ```shell
 docker build -t crudtest:db \
   --build-arg db_host=localhost \
-  --build-arg db_port=80 \
+  --build-arg db_port=3306 \
   --build-arg  db_user=root \
   --build-arg db_password=password \
   --build-arg db_name=crudtest \
@@ -108,7 +108,6 @@ finally, we will create nginx load balancer and link the service contaienrs.
 docker run -i -t -d --name databaseservice \
   --network=crudtestnetwork \
   --ip 172.2.0.10 \
-  -p 3333:3306 \
   --privileged crudtest:db
 ```
 ##### create authservice container
