@@ -48,13 +48,13 @@ DELETE | delete | delete function
 ### (2) Monolith Build Image And Create Container
 #### (2.1) Build Image 
 ```shell
-docker build -t curltest:monolith --no-cache  -f ./dockerize/Dockerfile .
+docker build -t crudtest:monolith --no-cache  -f ./dockerize/Dockerfile .
 ```
 #### (2.2) Create Container
 ```shell
-docker run -i -t -d --name curltest001 \
+docker run -i -t -d --name container001 \
 -p 9000:80 \
---privileged curltest:monolith
+--privileged crudtest:monolith
 ```
 ### (3) MicroService Build Image and Create Containers
 #### (3.1) Architecture for local
