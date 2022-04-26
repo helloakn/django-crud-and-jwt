@@ -18,7 +18,9 @@
   - (2.2) Create Container
 - (3) MicroService Build Image and Create Containers
   - (3.1) Architecture for local
-  - .env simple 
+  - (3.2) Crete network
+  - (3.3) Build images
+  - (3.4) Create Containers
 - Configuration without Docker
 - Manual Test with CURL
 
@@ -65,11 +67,18 @@ docker network create \
   --ip-range=172.2.0.0/24 \
   crudtestnetwork
 ```
+#### (3.3) Build images
 create database container
 ```shell
-docker build -t curltest:db --no-cache -f ./dockerize/db/DFdb .
+docker build -t curltest:db \
+  --build-arg db_host=localhost \
+  --build-arg db_port=80 \
+  --build-arg  db_user=root \
+  --build-arg db_password=password \
+  --build-arg db_name=crudtest \
+  --no-cache -f ./dockerize/db/DFdb .
 ```
-
+create authservice container
 ```shell
 docker build  -t curltest:authservice \
     --build-arg db_host=localhost \
@@ -77,29 +86,62 @@ docker build  -t curltest:authservice \
     --build-arg  db_user=root \
     --build-arg db_password=password \
     --build-arg db_name=crudtest \
-    --no-cache -f ./dockerize/authservice/DFauthService .
+    --no-cache -f ./dockerize/DFauthservice .
 ```
-### Create and Execute Container
-port 9090
+create productservice container
 ```shell
-docker run -i -t -d --name curltest001 -p 9000:80 --privileged curltest:latest
-docker run -i -t -d --name curltest002  --privileged curltest2:latest
-
-docker run -i -t -d --name authservice \
- --network=crudtestnetwork \
- --ip 172.2.0.10 \
- --privileged curltest:authservice
-
-docker exec -it curltest001 bash
+docker build  -t curltest:productservice \
+    --build-arg db_host=localhost \
+    --build-arg db_port=80 \
+    --build-arg  db_user=root \
+    --build-arg db_password=password \
+    --build-arg db_name=crudtest \
+    --no-cache -f ./dockerize/DFproductservice .
 ```
-### clean the containers
+#### (3.4) Create Containers
+First we have to database container.
+for second, we will create service containers and link the database container from the services container.
+finally, we will create nginx load balancer and link the service contaienrs.
+
+##### create database container
+```shell
+docker run -i -t -d --name databaseservice \
+  --network=crudtestnetwork \
+  --ip 172.2.0.10 \
+  --privileged crudtest:db
+```
+##### create authservice container
+```shell
+docker run -i -t -d --name authservice \
+  --network=crudtestnetwork \
+  --ip 172.2.0.20 \
+  --link databaseservice:172.2.0.10
+  --privileged crudtest:authservice
+```
+##### create productservice container
+```shell
+docker run -i -t -d --name productservice \
+  --network=crudtestnetwork \
+  --ip 172.2.0.30 \
+  --link databaseservice:172.2.0.10
+  --privileged crudtest:productservice
+```
+
+##### create productservice container
+```shell
+docker run -i -t -d --name productservice \
+  --network=crudtestnetwork \
+  --ip 172.2.0.30 \
+  --link authservice:172.2.0.20
+  --link productservice:172.2.0.30
+  --privileged crudtest:loadbalancer
+```
+##### Clean the containers
 ```shell
 docker rm $(docker stop $(docker ps -a -q))
 ```
 ### clean the images
 ```shell
-docker rmi curltest
-or
 docker rmi $(docker images -q) -f
 ```
 
@@ -130,7 +172,7 @@ You have to replace the refresh token with your own refresh token
 curl \
   -X POST \
   -d '{"refresh":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUwOTQ4NzA3LCJpYXQiOjE2NTA5NDg0MDcsImp0aSI6IjY1ZDRkNjBlZDAwZTRmZGY5MzU4MmFlZmNjYzJmNGFiIiwidXNlcl9pZCI6MX0.ynhU6sWx7mgluxn5_6wZtMGlRTv15CX5J6DO-HRqlIk"}' \
-  http://127.0.0.1:8000/api/auth/oken/refresh
+  http://127.0.0.1:8000/api/auth/token/refresh
 ```
 ### Create Product
 ```

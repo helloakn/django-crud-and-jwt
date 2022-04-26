@@ -3,13 +3,13 @@ FROM debian:10
 #FROM python:3 867MB big size
 ENV APPDIR /var/www/html/app
 ENV PORT 80
-ENV SOURCEDIR ../../code
+ENV SOURCEDIR ../code
 
 WORKDIR $APPDIR
 
 RUN mkdir -p /var/www/html
 COPY $SOURCEDIR $APPDIR
-RUN rm -rf $APPDIR/authService
+RUN rm -rf $APPDIR/productService
 RUN apt update -y
 RUN apt upgrade -y
 RUN apt install -y python3-pip
