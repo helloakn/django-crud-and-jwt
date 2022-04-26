@@ -43,5 +43,5 @@ RUN /etc/init.d/mysql restart && /bin/bash -c "mysqld_safe --skip-grant-tabses" 
 # DELETE FROM mysql.db WHERE Db='test' OR Db='test_%';\
 # FLUSH PRIVILEGES;       \
 #"
-CMD /etc/init.d/mysql start
+CMD ["/etc/init.d/mysql", "restart"]
 EXPOSE 3306
