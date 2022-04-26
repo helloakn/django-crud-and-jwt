@@ -96,6 +96,11 @@ docker build  -t crudtest:productservice \
     --build-arg db_name=crudtest \
     --no-cache -f ./dockerize/DFproductservice .
 ```
+create LoadBalancer Service container
+```shell
+docker build  -t crudtest:lb \
+    --no-cache -f ./dockerize/DFlbservice .
+```
 #### (3.4) Create Containers
 First we have to database container.
 for second, we will create service containers and link the database container from the services container.
@@ -128,6 +133,14 @@ docker run -i -t -d --name productservice \
 ##### create productservice container
 ```shell
 docker run -i -t -d --name productservice \
+  --network=crudtestnetwork \
+  --ip 172.2.0.30 \
+  --link authservice:172.2.0.20 \
+  --privileged crudtest:loadbalancer
+```
+##### create loadbalancer service container
+```shell
+docker run -i -t -d --name lbservice \
   --network=crudtestnetwork \
   --ip 172.2.0.30 \
   --link authservice:172.2.0.20 \

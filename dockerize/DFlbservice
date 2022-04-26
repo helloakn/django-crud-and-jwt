@@ -1,0 +1,7 @@
+FROM nginx
+ENV PORT 80
+ENV SOURCEDIR ../code
+RUN rm -rf /etc/nginx/conf.d/default.conf
+COPY $SOURCEDIR/loadbalancer.conf /etc/nginx/conf.d/loadbalancer.conf
+EXPOSE $PORT
+CMD ["nginx", "-g", "daemon off;"]
