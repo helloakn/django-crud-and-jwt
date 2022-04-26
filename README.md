@@ -45,7 +45,7 @@ DELETE | delete | delete function
 ### (2) Monolith Build Image And Create Container
 #### (2.1) Build Image 
 ```shell
-docker build -t curltest:monolith -f ./dockerize/Dockerfile .
+docker build -t curltest:monolith --no-cache  -f ./dockerize/Dockerfile .
 ```
 #### Create Container
 ```shell

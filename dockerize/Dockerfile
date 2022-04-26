@@ -7,7 +7,7 @@ COPY ../code $APPDIR
 RUN apt update -y
 RUN apt upgrade -y
 RUN apt install -y python3-pip
-RUN apt install build-essential libssl-dev libffi-dev python3-dev -y
+RUN apt install build-essential libssl-dev libffi-dev python3-dev python3-mysqldb -y
 RUN apt install -y python3-venv
 WORKDIR $APPDIR
 RUN python3.7 -m venv _env
