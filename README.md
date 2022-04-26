@@ -14,6 +14,8 @@
     - (1.2.1) Flow Diagram
     - (1.2.2) API Request Method and Access Function 
 - (2) Monolith Build Image And Create Container
+  - (2.1) Build Image
+  - (2.2) Create Container
 - Configuration with Dockerize
   - .env simple 
 - Configuration without Docker
@@ -40,13 +42,26 @@ PATCH | patch | update function
 DELETE | delete | delete function
 
 
-
-
-### Monolith Build Image And Create Container
+### (2) Monolith Build Image And Create Container
+#### (2.1) Build Image 
 ```shell
-docker build -t curltest -f ./dockerize/Dockerfile .
+docker build -t curltest:monolith -f ./dockerize/Dockerfile .
+```
+#### Create Container
+```shell
+docker run -i -t -d --name curltest001 \
+-p 9000:80 \
+--privileged curltest:monolith
 ```
 ### MicroService Build Process
+#### (2.1) Crete network
+```
+docker network create \
+  --driver=bridge \
+  --subnet=172.2.0.0/16 \
+  --ip-range=172.2.0.0/24 \
+  crudtestnetwork
+```
 create database container
 ```shell
 docker build -t curltest:db --no-cache -f ./dockerize/db/DFdb .
