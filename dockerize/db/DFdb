@@ -21,6 +21,7 @@ RUN /etc/init.d/mysql restart && /bin/bash -c "mysqld_safe --skip-grant-tabses" 
   mysql -u root -e "\
   DROP DATABASE IF EXISTS $db_name; \
   CREATE DATABASE $db_name; \
+  DROP USER 'root'@'localhost'; \
   CREATE USER '$db_user'@'%' IDENTIFIED BY '$db_password'; \
   GRANT ALL PRIVILEGES ON $db_name.* TO '$db_user'@'%'; \
   FLUSH PRIVILEGES; \
@@ -44,4 +45,4 @@ RUN /etc/init.d/mysql restart && /bin/bash -c "mysqld_safe --skip-grant-tabses" 
 # FLUSH PRIVILEGES;       \
 #"
 # CMD /etc/init.d/mysql start
-CMD tail -f /dev/null
+CMD /etc/init.d/mysql start && tail -f /dev/null
