@@ -126,28 +126,38 @@ You have to replace the refresh token with your own refresh token
 ```shell
 curl \
   -X POST \
-  -d '{"refresh":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY1MDk4MzY0NywiaWF0IjoxNjUwODk3MjQ3LCJqdGkiOiIyMmY0NThmMTA4YWE0NjEzOTEwYjA4ZWIxODRhMzdhMCIsInVzZXJfaWQiOjF9.S1_5PJVJERCx-O0p7_kL2S3N2Eg-ecMfc5Dg0VaVsng"}' \
+  -d '{"refresh":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUwOTQ4NzA3LCJpYXQiOjE2NTA5NDg0MDcsImp0aSI6IjY1ZDRkNjBlZDAwZTRmZGY5MzU4MmFlZmNjYzJmNGFiIiwidXNlcl9pZCI6MX0.ynhU6sWx7mgluxn5_6wZtMGlRTv15CX5J6DO-HRqlIk"}' \
   http://127.0.0.1:8000/api/auth/oken/refresh
 ```
+### Create Product
+```
+curl -X POST \
+http://127.0.0.1:8000/api/product/  \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUwOTUwODQzLCJpYXQiOjE2NTA5NTA1NDMsImp0aSI6IjVjNmVlNWQzMGY0YzQ1YmY4NDYxNTEyYjY1OTc0MGE0IiwidXNlcl9pZCI6MX0.4hrKHDXfaG_i-XuEF1TV64mjvlQ7HDbEfWzttMlEpww" \
+-d "{\"product_name\":\"name\",\"product_price\":\"41\",\"product_quantity\":\"1\"}"
 
+```
 ### Get Product List
 You have to replace with your own "access token" , you can get it from login process.
 ```shell
 curl -X GET \
--H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUwOTIyNTE0LCJpYXQiOjE2NTA5MjIyMTQsImp0aSI6ImZmODBiNjgzYjQ2YjRiZmFiZGU1MjQxODZkZDI0NTNmIiwidXNlcl9pZCI6MX0.9gVekcrnuecBgI2FlVcI1KPRgKuhVRcZ6Q9aroFKEfc" \
+-H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUwOTQ5MDg3LCJpYXQiOjE2NTA5NDg3ODcsImp0aSI6ImU4NDg1MmY0N2FhYjQ0NjY5NmRkMzZiNGFiYWE2ZTc5IiwidXNlcl9pZCI6MX0.SSsOiz7gBFCuKkZFShDlewsnF_wteu9B8fW4UOnEg_8" \
 http://127.0.0.1:8000/api/product/
 ```
 
 ### Get Product Detail
 ```
 curl -X GET \
--H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUwOTIyNTE0LCJpYXQiOjE2NTA5MjIyMTQsImp0aSI6ImZmODBiNjgzYjQ2YjRiZmFiZGU1MjQxODZkZDI0NTNmIiwidXNlcl9pZCI6MX0.9gVekcrnuecBgI2FlVcI1KPRgKuhVRcZ6Q9aroFKEfc" \
-http://127.0.0.1:8000/api/product/1
+http://127.0.0.1:8000/api/product/1 \
+-H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUwOTUwMDEwLCJpYXQiOjE2NTA5NDk3MTAsImp0aSI6IjdjOTQxMTVkMDhlZjRiMWVhYzk2YzE5NjM2YzhlNTE5IiwidXNlcl9pZCI6MX0.BdlcdwrrWH609EPf4Bvx04oIdjG5IF7Fnw9zR-Q3M-I"
+
 ```
 
 ### Update Product
 ```
 curl -X PATCH \
 http://127.0.0.1:8000/api/product/1 \
+-H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUwOTQ4NzA3LCJpYXQiOjE2NTA5NDg0MDcsImp0aSI6IjY1ZDRkNjBlZDAwZTRmZGY5MzU4MmFlZmNjYzJmNGFiIiwidXNlcl9pZCI6MX0.ynhU6sWx7mgluxn5_6wZtMGlRTv15CX5J6DO-HRqlIk" \
 -H 'Content-Type: application/json' -d '{"product_quantity":6}'
 ```

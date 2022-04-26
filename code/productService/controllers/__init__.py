@@ -58,7 +58,8 @@ class ProductViews(APIView):
         )
 
     def patch(self, request, id=None):
-        item = Product.objects.get(id=id)
+        #item = Product.objects.get(id=id)
+        item = get_object_or_404(Product, id=id)
         serializer = ProductSerializer(item, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
