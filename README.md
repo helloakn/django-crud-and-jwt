@@ -106,15 +106,14 @@ finally, we will create nginx load balancer and link the service contaienrs.
 docker run -i -t -d --name databaseservice \
   --network=crudtestnetwork \
   --ip 172.2.0.10 \
-  --privileged crudtest:db \
-  --tty --entrypoint /bin/sh
+  --privileged crudtest:db 
 ```
 ##### create authservice container
 ```shell
 docker run -i -t -d --name authservice \
   --network=crudtestnetwork \
   --ip 172.2.0.20 \
-  --link databaseservice:172.2.0.10
+  --link databaseservice:172.2.0.10 \
   --privileged crudtest:authservice
 ```
 ##### create productservice container
@@ -122,7 +121,7 @@ docker run -i -t -d --name authservice \
 docker run -i -t -d --name productservice \
   --network=crudtestnetwork \
   --ip 172.2.0.30 \
-  --link databaseservice:172.2.0.10
+  --link databaseservice:172.2.0.10 \
   --privileged crudtest:productservice
 ```
 
@@ -131,8 +130,8 @@ docker run -i -t -d --name productservice \
 docker run -i -t -d --name productservice \
   --network=crudtestnetwork \
   --ip 172.2.0.30 \
-  --link authservice:172.2.0.20
-  --link productservice:172.2.0.30
+  --link authservice:172.2.0.20 \
+  --link productservice:172.2.0.30 \
   --privileged crudtest:loadbalancer
 ```
 ##### Clean the containers

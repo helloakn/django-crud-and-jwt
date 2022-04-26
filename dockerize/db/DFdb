@@ -16,6 +16,8 @@ RUN apt install mariadb-server -y
 
 ADD $SOURCEDIR/../database/backup.sql ./backup.sql
 # RUN usermod -d /var/lib/mysql/ mysql
+RUN rm -rf /etc/mysql/mariadb.conf.d/50-server.cnf
+COPY $SOURCEDIR/mysql.conf /etc/mysql/mariadb.conf.d/50-server.cnf
 RUN /etc/init.d/mysql restart && /bin/bash -c "mysqld_safe --skip-grant-tabses" && \
   sleep 5 && \
   mysql -u root -e "\
