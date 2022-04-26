@@ -2,4 +2,4 @@ Django
 djangorestframework
 djangorestframework-simplejwt
 django-environ
-mysqlclient
+mysqlclient==2.0.3

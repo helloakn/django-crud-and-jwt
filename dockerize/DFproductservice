@@ -1,9 +1,14 @@
 #FROM public.ecr.aws/debian/debian:bullseye
 FROM debian:10
 #FROM python:3 867MB big size
+ARG db_password
+ARG db_user
+ARG db_name
+ARG db_host
 ENV APPDIR /var/www/html/app
 ENV PORT 80
 ENV SOURCEDIR ../code
+
 
 WORKDIR $APPDIR
 
@@ -13,15 +18,27 @@ RUN rm -rf $APPDIR/authService
 RUN apt update -y
 RUN apt upgrade -y
 RUN apt install -y python3-pip
-RUN apt install build-essential libssl-dev libffi-dev python3-dev python3-mysqldb -y
+RUN apt install build-essential libssl-dev libffi-dev default-libmysqlclient-dev python3-dev python3-mysqldb -y
 RUN apt install -y python3-venv
 
 RUN python3.7 -m venv _env
 RUN . _env/bin/activate
 RUN pip3 install -r requirements.txt 
 RUN ls -la
-RUN python3 manage.py migrate
+RUN echo "\
+DEBUG=True\n\
+DRIVER=mysql\n\
+SECRET_KEY=insecure-abc80tzv1(i!)z_(qd2p(3umk16agi80@w@yrjio!g_lwrz73x\n\
+SQL_HOST=$db_host\n\
+SQL_PORT=3306\n\
+SQL_USER=$db_user\n\
+SQL_PASSWORD=$db_password\n\
+SQL_DB_NAME=$db_name\n\
 
-CMD python3 manage.py runserver 0.0.0.0:$PORT
+" > .env
+#RUN python3 manage.py migrate
+
+
+CMD python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:$PORT
 
 EXPOSE $PORT

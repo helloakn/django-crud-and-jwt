@@ -133,10 +133,10 @@ WSGI_APPLICATION = 'MainApp.wsgi.application'
 # }
 mysql={
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'curltest',
-        'USER': 'root',
-        'PASSWORD': 'aknakn0091',
-        'HOST': 'localhost',
+        'NAME': env('SQL_DB_NAME'),
+        'USER': env('SQL_USER'),
+        'PASSWORD': env('SQL_PASSWORD'),
+        'HOST': env('SQL_HOST'),
         'PORT': '3306'
     }
 sqlite3={

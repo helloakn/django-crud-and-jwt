@@ -2,7 +2,7 @@
 FROM debian:10
 #FROM python:3 867MB big size
 ENV APPDIR /var/www/html/app
-ENV PORT 80
+ENV PORT 3306
 ENV SOURCEDIR ../../code
 ARG db_password
 ARG db_user
@@ -46,3 +46,4 @@ RUN /etc/init.d/mysql restart && /bin/bash -c "mysqld_safe --skip-grant-tabses" 
 #"
 # CMD /etc/init.d/mysql start
 CMD /etc/init.d/mysql start && tail -f /dev/null
+EXPOSE $PORT
