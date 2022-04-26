@@ -51,18 +51,42 @@ SQL_PASSWORD=pass1
 SQL_DB_NAME=crudtest
 ```
 
-## dockerize
-### Build Process
+docker network create \
+  --driver=bridge \
+  --subnet=172.2.0.0/16 \
+  --ip-range=172.2.0.0/24 \
+  crudtestnetwork
+
+### Monolith Build Process
 ```shell
 docker build -t curltest -f ./dockerize/Dockerfile .
-docker build -t curltest:authservice -f ./dockerize/authservice/DFauthService .
+```
+### MicroService Build Process
+create database container
+```shell
+docker build -t curltest:db --no-cache -f ./dockerize/db/DFdb .
+```
+
+```shell
+docker build  -t curltest:authservice \
+    --build-arg db_host=localhost \
+    --build-arg db_port=80 \
+    --build-arg  db_user=root \
+    --build-arg db_password=password \
+    --build-arg db_name=crudtest \
+    --no-cache -f ./dockerize/authservice/DFauthService .
 ```
 ### Create and Execute Container
 port 9090
 ```shell
 docker run -i -t -d --name curltest001 -p 9000:80 --privileged curltest:latest
 docker run -i -t -d --name curltest002  --privileged curltest2:latest
-docker run -i -t -d --name curltest004  --privileged curltest4:latest
+
+docker run -i -t -d --name authservice \
+ --network=crudtestnetwork \
+ --ip 172.2.0.10 \
+ --privileged curltest:authservice
+
 docker exec -it curltest001 bash
 ```
 ### clean the containers
@@ -103,7 +127,7 @@ You have to replace the refresh token with your own refresh token
 curl \
   -X POST \
   -d '{"refresh":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTY1MDk4MzY0NywiaWF0IjoxNjUwODk3MjQ3LCJqdGkiOiIyMmY0NThmMTA4YWE0NjEzOTEwYjA4ZWIxODRhMzdhMCIsInVzZXJfaWQiOjF9.S1_5PJVJERCx-O0p7_kL2S3N2Eg-ecMfc5Dg0VaVsng"}' \
-  http://localhost:9000/api/auth/oken/refresh
+  http://127.0.0.1:8000/api/auth/oken/refresh
 ```
 
 ### Get Product List
@@ -112,4 +136,18 @@ You have to replace with your own "access token" , you can get it from login pro
 curl -X GET \
 -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUwOTIyNTE0LCJpYXQiOjE2NTA5MjIyMTQsImp0aSI6ImZmODBiNjgzYjQ2YjRiZmFiZGU1MjQxODZkZDI0NTNmIiwidXNlcl9pZCI6MX0.9gVekcrnuecBgI2FlVcI1KPRgKuhVRcZ6Q9aroFKEfc" \
 http://127.0.0.1:8000/api/product/
+```
+
+### Get Product Detail
+```
+curl -X GET \
+-H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUwOTIyNTE0LCJpYXQiOjE2NTA5MjIyMTQsImp0aSI6ImZmODBiNjgzYjQ2YjRiZmFiZGU1MjQxODZkZDI0NTNmIiwidXNlcl9pZCI6MX0.9gVekcrnuecBgI2FlVcI1KPRgKuhVRcZ6Q9aroFKEfc" \
+http://127.0.0.1:8000/api/product/1
+```
+
+### Update Product
+```
+curl -X PATCH \
+http://127.0.0.1:8000/api/product/1 \
+-H 'Content-Type: application/json' -d '{"product_quantity":6}'
 ```

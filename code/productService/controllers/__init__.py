@@ -2,10 +2,14 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from ..models.serializers import ProductSerializer
-from ..models.productModel import Product
-
+from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
+#from ..models.productModel import Product
+from productService.models.productModel import Product
+print(Product)
 print('product workds')
 class ProductViews(APIView):
+    permission_classes = (IsAuthenticated,)
     def post(self, request):
         print('product post workds')
         serializer = ProductSerializer(data=request.data)
@@ -28,8 +32,12 @@ class ProductViews(APIView):
             )
     #get list or get by id
     def get(self, request, id=None):
+        print('here we go, it works')
+        print(id)
         if id:
-            item = Product.objects.get(id=id)
+            print('akn ret')
+            #item = Product.objects.get(id=id)
+            item = get_object_or_404(Product, id=id)
             serializer = ProductSerializer(item)
             return Response(
                 {
