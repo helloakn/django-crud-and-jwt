@@ -1,0 +1,27 @@
+#FROM public.ecr.aws/debian/debian:bullseye
+FROM debian:10
+#FROM python:3 867MB big size
+ENV APPDIR /var/www/html/app
+ENV PORT 80
+ENV SOURCEDIR ../../code
+
+WORKDIR $APPDIR
+
+RUN mkdir -p /var/www/html
+COPY $SOURCEDIR $APPDIR
+RUN rm -rf $APPDIR/productService
+RUN apt update -y
+RUN apt upgrade -y
+RUN apt install -y python3-pip
+RUN apt install build-essential libssl-dev libffi-dev python3-dev python3-mysqldb -y
+RUN apt install -y python3-venv
+
+RUN python3.7 -m venv _env
+RUN . _env/bin/activate
+RUN pip3 install -r requirements.txt 
+RUN ls -la
+RUN python3 manage.py migrate
+
+CMD python3 manage.py runserver 0.0.0.0:$PORT
+
+EXPOSE $PORT

@@ -1,0 +1,14 @@
+#FROM public.ecr.aws/debian/debian:bullseye
+FROM mysql
+#FROM python:3 867MB big size
+ENV APPDIR /var/www/html/app
+ENV PORT 80
+ENV SOURCEDIR ../../code
+
+RUN mkdir -p /var/www/html
+WORKDIR $APPDIR
+
+ENV MYSQL_ROOT_PASSWORD pwd12345BNM
+ADD $SOURCEDIR/../database/backup.sql /docker-entrypoint-initdb.d
+
+EXPOSE 3306

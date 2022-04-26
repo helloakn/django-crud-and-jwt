@@ -17,6 +17,7 @@
 - Configuration with Dockerize
   - .env simple 
 - Configuration without Docker
+- Manual Test with CURL
 
 ### Story and Program Flow
 
@@ -54,28 +55,40 @@ SQL_DB_NAME=crudtest
 ### Build Process
 ```shell
 docker build -t curltest -f ./dockerize/Dockerfile .
+docker build -t curltest:authservice -f ./dockerize/authservice/DFauthService .
 ```
 ### Create and Execute Container
 port 9090
 ```shell
 docker run -i -t -d --name curltest001 -p 9000:80 --privileged curltest:latest
+docker run -i -t -d --name curltest002  --privileged curltest2:latest
+docker run -i -t -d --name curltest004  --privileged curltest4:latest
 docker exec -it curltest001 bash
 ```
 ### clean the containers
 ```shell
-docker rm $(docker stop $(docker ps -a))
+docker rm $(docker stop $(docker ps -a -q))
 ```
 ### clean the images
 ```shell
 docker rmi curltest
+or
+docker rmi $(docker images -q) -f
 ```
 
 
 ## Manual Test with CURL
-### Login and Renew Token (refresh token)
-### login
+login information
+```
 user name : admin  
 password : 123456  
+```
+or generate with the following command
+```
+python3 manage.py createsuperuser
+```
+### Login and Renew Token (refresh token)
+### login
 
 ```shell
 curl \
@@ -97,6 +110,6 @@ curl \
 You have to replace with your own "access token" , you can get it from login process.
 ```shell
 curl -X GET \
--H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUwODk4MzgwLCJpYXQiOjE2NTA4OTgwODAsImp0aSI6IjNiMzBkZjc1OGEwMTQ4YjNiZGRlYTc3YzYwYzJkZDc2IiwidXNlcl9pZCI6MX0.5VBwMa0DptAB_7WyRjy4fE7FLgTJv_tDYcloT3_BIzM" \
-http://127.0.0.1:9000/api/product/
+-H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUwOTIyNTE0LCJpYXQiOjE2NTA5MjIyMTQsImp0aSI6ImZmODBiNjgzYjQ2YjRiZmFiZGU1MjQxODZkZDI0NTNmIiwidXNlcl9pZCI6MX0.9gVekcrnuecBgI2FlVcI1KPRgKuhVRcZ6Q9aroFKEfc" \
+http://127.0.0.1:8000/api/product/
 ```

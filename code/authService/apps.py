@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ApiappConfig(AppConfig):
+class productServiceConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'ApiApp'
+    name = 'authService'

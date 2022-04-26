@@ -45,9 +45,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework_simplejwt',
-    'ApiApp'
+    #'productService',
+    #'authService'
 ]
-
+dirs = os.listdir(BASE_DIR)
+for dir in dirs:
+    if dir.endswith("Service"):
+        INSTALLED_APPS.append(dir)
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
