@@ -8,29 +8,30 @@
 [![python](https://img.shields.io/badge/python-v3.10-blue)](https://github.com/helloakn/django-crud-and-jwt) 
 
 ## Table Of contents
-- Story and API Flow 
-  - Story
-  - API Flow  
-    - Flow Diagram
-    - API Request Method and Access Function 
-- Build With
+- (1) Story and API Flow 
+  - (1.1) Story
+  - (1.2) API Flow  
+    - (1.2.1) Flow Diagram
+    - (1.2.2) API Request Method and Access Function 
+- (2) Monolith Build Image And Create Container
 - Configuration with Dockerize
   - .env simple 
 - Configuration without Docker
 - Manual Test with CURL
 
-### Story and Program Flow
+### (1) Story and Program Flow
 
-#### Story
+#### (1.2) Story
 Our task is to create/update/delete/Get/list the product(s).  
 However we need **JWT** to protect all our product api routes,  
 so we will have to create two services.  
 - (1) **login service** to grant **access token** and **refresh token**  
 - (2) **token refresh service** to generate new **access token** 
-#### API Flow
+#### (1.2) API Flow
 Program Flow is as the following diagram.
+#### (1.2.1) Flow Diagram
 ![alt text](resource/apiflow.png)
-#### API Request Method and Access Function  
+#### (1.2.2) API Request Method and Access Function  
 HTTP Request Method | Django Access Function | Remark
 --- | ---  | ---
 GET | get | get record(s) function
@@ -38,26 +39,10 @@ POST | post | create function
 PATCH | patch | update function
 DELETE | delete | delete function
 
-### .env sample
-file location exists as ./code/.env
-```
-DEBUG=True
-DRIVER=sqlite3 or mysql
-SECRET_KEY=insecure-abc80tzv1(i!)z_(qd2p(3umk16agi80@w@yrjio!g_lwrz73x
-SQL_HOST=localhost
-SQL_PORT=3306
-SQL_USER=usr1
-SQL_PASSWORD=pass1
-SQL_DB_NAME=crudtest
-```
 
-docker network create \
-  --driver=bridge \
-  --subnet=172.2.0.0/16 \
-  --ip-range=172.2.0.0/24 \
-  crudtestnetwork
 
-### Monolith Build Process
+
+### Monolith Build Image And Create Container
 ```shell
 docker build -t curltest -f ./dockerize/Dockerfile .
 ```
