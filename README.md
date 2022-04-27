@@ -129,23 +129,15 @@ docker run -i -t -d --name productservice \
   --link databaseservice:172.2.0.10 \
   --privileged crudtest:productservice
 ```
-
-##### create productservice container
-```shell
-docker run -i -t -d --name productservice \
-  --network=crudtestnetwork \
-  --ip 172.2.0.30 \
-  --link authservice:172.2.0.20 \
-  --privileged crudtest:loadbalancer
-```
 ##### create loadbalancer service container
 ```shell
 docker run -i -t -d --name lbservice \
   --network=crudtestnetwork \
-  --ip 172.2.0.30 \
+  --ip 172.2.0.40 \
+  -p 8000:80 \
   --link authservice:172.2.0.20 \
   --link productservice:172.2.0.30 \
-  --privileged crudtest:loadbalancer
+  --privileged crudtest:lb
 ```
 ##### Clean the containers
 ```shell
