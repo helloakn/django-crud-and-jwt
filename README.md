@@ -21,8 +21,18 @@
   - (3.2) Crete network
   - (3.3) Build images
   - (3.4) Create Containers
-- Configuration without Docker
-- Manual Test with CURL
+- (4) Manual Test with CURL
+  - (4.1) Login and Renew Token (refresh token)
+    - (4.1.1) login
+    - (4.1.2) Renew Token (refresh token)
+  - (4.2) Product CRUD
+    - (4.2.1) Create Product
+    - (4.2.2) Get Product List
+    - (4.2.3) Get Product Detail
+    - (4.2.4) Update Product
+---
+
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ### (1) Story and Program Flow
 
@@ -44,6 +54,7 @@ POST | post | create function
 PATCH | patch | update function
 DELETE | delete | delete function
 
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 ### (2) Monolith Build Image And Create Container
 #### (2.1) Build Image 
@@ -56,6 +67,10 @@ docker run -i -t -d --name container001 \
 -p 9000:80 \
 --privileged crudtest:monolith
 ```
+---
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
 ### (3) MicroService Build Image and Create Containers
 #### (3.1) Architecture for local
 ![alt text](resource/local-archie.png)
@@ -68,7 +83,7 @@ docker network create \
   crudtestnetwork
 ```
 #### (3.3) Build images
-create database container
+#### create database image
 ```shell
 docker build -t crudtest:db \
   --build-arg db_host=localhost \
@@ -78,7 +93,7 @@ docker build -t crudtest:db \
   --build-arg db_name=crudtest \
   --no-cache -f ./dockerize/db/DFdb .
 ```
-create authservice container
+#### create authservice image
 ```shell
 docker build  -t crudtest:authservice \
     --build-arg db_host=172.2.0.10 \
@@ -87,7 +102,7 @@ docker build  -t crudtest:authservice \
     --build-arg db_name=crudtest \
     --no-cache -f ./dockerize/DFauthservice .
 ```
-create productservice container
+#### create productservice image
 ```shell
 docker build  -t crudtest:productservice \
     --build-arg db_host=172.2.0.10 \
@@ -96,11 +111,13 @@ docker build  -t crudtest:productservice \
     --build-arg db_name=crudtest \
     --no-cache -f ./dockerize/DFproductservice .
 ```
-create LoadBalancer Service container
+#### create LoadBalancer Service image
 ```shell
 docker build  -t crudtest:lb \
     --no-cache -f ./dockerize/DFlbservice .
 ```
+<p align="right">(<a href="#top">back to top</a>)</p>
+
 #### (3.4) Create Containers
 First we have to database container.
 for second, we will create service containers and link the database container from the services container.
@@ -139,17 +156,22 @@ docker run -i -t -d --name lbservice \
   --link productservice:172.2.0.30 \
   --privileged crudtest:lb
 ```
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
 ##### Clean the containers
 ```shell
 docker rm $(docker stop $(docker ps -a -q))
 ```
-### clean the images
+#### clean the images
 ```shell
 docker rmi $(docker images -q) -f
 ```
+---
 
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-## Manual Test with CURL
+## (4) Manual Test with CURL
 login information
 ```
 user name : admin  
@@ -159,8 +181,8 @@ or generate with the following command
 ```
 python3 manage.py createsuperuser
 ```
-### Login and Renew Token (refresh token)
-### login
+### (4.1) Login and Renew Token (refresh token)
+#### (4.1.1) login
 
 ```shell
 curl \
@@ -169,7 +191,7 @@ curl \
   -d '{"username": "admin", "password": "123456"}' \
   http://localhost:8000/api/auth/login
 ```
-### Renew Token (refresh token)
+#### (4.1.2) Renew Token (refresh token)
 You have to replace the refresh token with your own refresh token
 ```shell
 curl \
@@ -177,7 +199,11 @@ curl \
   -d '{"refresh":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUwOTQ4NzA3LCJpYXQiOjE2NTA5NDg0MDcsImp0aSI6IjY1ZDRkNjBlZDAwZTRmZGY5MzU4MmFlZmNjYzJmNGFiIiwidXNlcl9pZCI6MX0.ynhU6sWx7mgluxn5_6wZtMGlRTv15CX5J6DO-HRqlIk"}' \
   http://127.0.0.1:8000/api/auth/token/refresh
 ```
-### Create Product
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+### (4.2) Product CRUD
+#### (4.2.1) Create Product
 ```
 curl -X POST \
 http://127.0.0.1:8000/api/product/  \
@@ -186,7 +212,7 @@ http://127.0.0.1:8000/api/product/  \
 -d "{\"product_name\":\"name\",\"product_price\":\"41\",\"product_quantity\":\"1\"}"
 
 ```
-### Get Product List
+### (4.2.2) Get Product List
 You have to replace with your own "access token" , you can get it from login process.
 ```shell
 curl -X GET \
@@ -194,7 +220,7 @@ curl -X GET \
 http://127.0.0.1:8000/api/product/
 ```
 
-### Get Product Detail
+### (4.2.3) Get Product Detail
 ```
 curl -X GET \
 http://127.0.0.1:8000/api/product/1 \
@@ -202,10 +228,11 @@ http://127.0.0.1:8000/api/product/1 \
 
 ```
 
-### Update Product
+### (4.2.4) Update Product
 ```
 curl -X PATCH \
 http://127.0.0.1:8000/api/product/1 \
 -H "Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjUwOTQ4NzA3LCJpYXQiOjE2NTA5NDg0MDcsImp0aSI6IjY1ZDRkNjBlZDAwZTRmZGY5MzU4MmFlZmNjYzJmNGFiIiwidXNlcl9pZCI6MX0.ynhU6sWx7mgluxn5_6wZtMGlRTv15CX5J6DO-HRqlIk" \
 -H 'Content-Type: application/json' -d '{"product_quantity":6}'
 ```
+<p align="right">(<a href="#top">back to top</a>)</p>
